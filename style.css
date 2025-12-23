@@ -1,4 +1,3 @@
-
 * {
   margin: 0;
   padding: 0;
@@ -18,12 +17,14 @@ body {
 .header {
   display: flex;
   align-items: center;
+  /* Keeps the Logo on the left */
+  justify-content: space-between;
   padding: 10px 20px;
   background: white;
   border-bottom: 1px solid #ddd;
-  position: relative;
   height: 60px;
-  flex-shrink: 0;
+  /* Necessary for centering the button relative to this bar */
+  position: relative;
   z-index: 20;
 }
 
@@ -39,6 +40,8 @@ body {
   height: 24px;
 }
 
+/* Button is now part of the natural flow, no longer absolute */
+/* ==================== CENTERED BUTTON (DESKTOP) ==================== */
 .book-btn {
   background: #007bff;
   color: white;
@@ -47,10 +50,12 @@ body {
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
+  white-space: nowrap;
+
+  /* CENTER LOGIC: Forces button to exact middle of the header */
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  white-space: nowrap;
 }
 
 .book-btn:hover {
@@ -144,6 +149,7 @@ body {
   overflow-x: hidden;
   position: relative;
 }
+
 .calendar-top {
   display: flex;
   justify-content: space-between;
@@ -562,7 +568,12 @@ body {
   color: #007bff;
 }
 
+/* ==================== MEDIA QUERIES (RESPONSIVENESS) ==================== */
+
+/* IMPORTANT: This line restricts these styles to Mobile/Tablet only */
 @media (max-width: 768px) {
+
+  /* Layout: Stack Sidebar at Bottom */
   .layout {
     flex-direction: column;
     height: calc(100vh - 60px);
@@ -570,11 +581,15 @@ body {
 
   .sidebar {
     width: 100%;
+    /* Full width */
     height: auto;
+    /* Height fits content */
     flex-direction: row;
+    /* Arrange icons side-by-side */
     border-right: none;
     border-top: 1px solid #ddd;
     order: 2;
+    /* Moves sidebar to bottom */
     padding: 0;
   }
 
@@ -584,6 +599,7 @@ body {
 
   .nav-item {
     flex: 1;
+    /* This is what was causing your issue! */
     justify-content: center;
     padding: 15px 0;
     flex-direction: column;
@@ -611,7 +627,7 @@ body {
     padding: 15px;
     height: calc(100% - 60px);
   }
-  
+
   .form-grid {
     grid-template-columns: 1fr;
   }
@@ -647,4 +663,25 @@ body {
   .input-with-icon {
     width: 100%;
   }
+
+  .book-btn {
+    /* Disable centering so it doesn't overlap the logo */
+    position: static;
+    transform: none;
+
+    /* Push it to the right side naturally */
+    margin-left: auto;
+
+    /* Make it slightly smaller */
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .header {
+    /* Ensure padding is comfortable on mobile */
+    padding: 10px 15px;
+  }
+
 }
+
+/* <--- MAKE SURE THIS CLOSING BRACKET EXISTS! */

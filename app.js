@@ -336,6 +336,7 @@ function exportSingleAppointment(appt, dateKey) {
   document.body.removeChild(link);
 }
 
+// ==================== SAVE APPOINTMENT (WITH VALIDATION) ====================
 saveBtn.onclick = () => {
   const patient = patientInput.value;
   const date = dateInput.value;
@@ -346,16 +347,33 @@ saveBtn.onclick = () => {
   let specialty = specialtyInput ? specialtyInput.value : "";
   let reason = reasonInput ? reasonInput.value : "";
 
-  if (!patient || !date || !time) return alert("Please fill required fields (Name, Date, Time)");
+  // 1. Basic Field Validation
+  if (!patient || !date || !time) {
+    alert("Please fill in all required fields (Name, Date, Time).");
+    return;
+  }
 
+  // 2. LOGICAL VALIDATION: Check for Past Date/Time
+  const selectedDateTime = new Date(`${date}T${time}`);
+  const now = new Date();
+
+  // We subtract a small buffer (e.g., 1 minute) to allow for "just now" clicks
+  if (selectedDateTime < now) {
+    alert("Invalid Date/Time: You cannot book an appointment in the past.\nPlease select a future date and time.");
+    return; // Stop the function here
+  }
+
+  // 3. Prepare Data
   if (!appointments[date]) appointments[date] = [];
 
+  // Remove old entry if we are editing
   if (editingId) {
     Object.keys(appointments).forEach(key => {
       appointments[key] = appointments[key].filter(a => a.id !== editingId);
     });
   }
 
+  // 4. Save
   appointments[date].push({
     id: editingId || Date.now(),
     name: patient, doctor, hospital, specialty, reason, time
@@ -364,6 +382,8 @@ saveBtn.onclick = () => {
   localStorage.setItem("appointments", JSON.stringify(appointments));
 
   closeModalLogic();
+  
+  // Refresh the current view
   if (dashboardView.style.display === "block") renderTable();
   else renderCalendar();
 };
