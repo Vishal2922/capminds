@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAPMINDS Calendar</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="logo">
+      <img src="assets/logo.png" alt="Logo" />
+      <span>CAPMINDS</span>
+    </div>
+    <button class="book-btn" id="openModal">+ Book Appointment</button>
+  </header>
+
+  <div class="layout">
+
+    <aside class="sidebar" id="sidebar">
+
+      <div class="toggle-btn" id="toggleSidebar">
+        <img src="assets/collapse.png" alt="collapse">
+      </div>
+
+      <div class="nav-item active" data-view="calendar">
+        <img src="assets/calendar.png" alt="cal" />
+        <span>Calendar</span>
+      </div>
+
+      <div class="nav-item" data-view="dashboard">
+        <img src="assets/dashboard.png" alt="dash" />
+        <span>Dashboard</span>
+      </div>
+    </aside>
+
+    <main class="content">
+
+      <div id="calendarView">
+        <div class="calendar-top">
+          <div class="calendar-left"></div>
+
+          <div class="calendar-right">
+            <button class="nav-btn" id="prev">&lt;</button>
+            <div class="date-display">
+              <img src="assets/calendar.png" alt="cal">
+              <span id="currentDate">Jan 18, 2023</span>
+            </div>
+            <button class="nav-btn" id="next">&gt;</button>
+            <button class="today-btn" id="today">Today</button>
+            <select class="view-select" id="monthSelect">
+              <option>Month</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="doctor-name">James Marry</div>
+
+        <div class="calendar-scroll-wrapper">
+
+          <div class="weekdays">
+            <div>Sunday</div>
+            <div>Monday</div>
+            <div>Tuesday</div>
+            <div>Wednesday</div>
+            <div>Thursday</div>
+            <div>Friday</div>
+            <div>Saturday</div>
+          </div>
+
+          <div class="calendar-grid" id="calendarGrid"></div>
+
+        </div>
+      </div>
+
+      <div id="dashboardView" style="display: none;">
+        <h2>Practice Dashboard</h2>
+
+        <div class="filter-bar">
+
+          <div class="input-with-icon">
+            <img src="assets/search.png" alt="search">
+            <input type="text" id="searchPatient" placeholder="Patient Search">
+          </div>
+
+          <div class="input-with-icon">
+            <img src="assets/search.png" alt="search">
+            <input type="text" id="searchDoctor" placeholder="Doctor Search">
+          </div>
+
+          <div class="date-range-group">
+            <div class="input-with-icon date-box">
+              <img src="assets/calendar.png" alt="cal">
+              <input type="date" id="startDate">
+            </div>
+
+            <span class="separator">—</span>
+
+            <div class="input-with-icon date-box">
+              <img src="assets/calendar.png" alt="cal">
+              <input type="date" id="endDate">
+            </div>
+          </div>
+
+          <div class="filter-actions">
+            <button class="update-btn" id="applyFilters">Update</button>
+            <button class="reset-btn" id="resetFilters">Reset</button>
+          </div>
+
+        </div>
+
+        <div class="table-container" style="box-shadow: none; background: transparent; padding: 0;">
+
+          <div class="table-header-box">
+            Appointment Details
+          </div>
+
+          <div class="table-scroll">
+            <table class="appt-table">
+              <thead>
+                <tr>
+                  <th>Patient</th>
+                  <th>Doctor</th>
+                  <th>Hospital</th>
+                  <th>Specialty</th>
+                  <th>Select Date</th>
+                  <th>Select Time</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="appointmentTableBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Schedule Appointment</h3>
+        <span class="close" id="closeModal">&times;</span>
+      </div>
+
+      <div class="form-grid">
+
+        <div class="input-group">
+          <img src="assets/user.png" alt="user">
+
+          <input type="text" id="patient" list="patientOptions" placeholder="Type or Select Patient Name">
+
+          <datalist id="patientOptions">
+            <option value="John Doe">
+            <option value="Emma Watson">
+            <option value="Michael Smith">
+            <option value="Henry James">
+          </datalist>
+        </div>
+
+        <div class="input-group">
+          <img src="assets/doctor.png" alt="doctor">
+          <select class="no-border" id="doctor">
+            <option value="">Doctor Name</option>
+            <option>James Marry</option>
+            <option>Dr. Olivia</option>
+            <option>Dr. Anderson</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <img src="assets/location.png" alt="loc"> <select class="no-border" id="hospital">
+            <option value="">Hospital Name</option>
+            <option>Salus Center</option>
+            <option>Ultracare Hospital</option>
+            <option>Sunrise Clinic</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <img src="assets/speciality.png" alt="spec"> <select class="no-border" id="specialty">
+            <option value="">Specialty</option>
+            <option>Cardiology</option>
+            <option>Dermatology</option>
+            <option>General Surgery</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <img src="assets/calendar.png" alt="cal">
+          <input type="date" id="date">
+        </div>
+
+        <div class="input-group">
+          <img src="assets/clock.png" alt="time">
+          <input type="time" id="time">
+        </div>
+
+        <div class="full-width">
+          <label for="reason">Reason</label>
+          <textarea id="reason" rows="2" placeholder="Enter reason for appointment"></textarea>
+        </div>
+
+      </div>
+
+      <div class="modal-actions">
+        <button id="closeModal2" class="btn-cancel">Cancel</button>
+        <button id="saveAppointment" class="btn-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
