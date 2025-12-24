@@ -660,5 +660,28 @@ body {
   .header {
     padding: 10px 15px;
   }
+  
+  #calendarView {
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; 
+    padding-bottom: 20px; 
+  }
+
+  #calendarGrid {
+    min-width: 700px; 
+  }
+  
+  .calendar-header {
+    min-width: 700px;
+  }
+  
+  .calendar-controls {
+    position: sticky;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    background: #f4f7f6; 
+    padding: 10px 0;
+  }
 
 }

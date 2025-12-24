@@ -336,16 +336,18 @@ function exportSingleAppointment(appt, dateKey) {
   document.body.removeChild(link);
 }
 
+// ==================== SAVE APPOINTMENT LOGIC (FIXED) ====================
 saveBtn.onclick = () => {
-  const patient = patientInput.value;
+  const patient = patientInput.value ? patientInput.value.trim() : "";
   const date = dateInput.value;
   const time = timeInput.value;
-
+  
   let doctor = doctorInput ? doctorInput.value : "";
   let hospital = hospitalInput ? hospitalInput.value : "";
   let specialty = specialtyInput ? specialtyInput.value : "";
   let reason = reasonInput ? reasonInput.value : "";
 
+  
   if (!patient || !date || !time) {
     alert("Please fill in all required fields (Name, Date, Time).");
     return;
@@ -354,9 +356,14 @@ saveBtn.onclick = () => {
   const selectedDateTime = new Date(`${date}T${time}`);
   const now = new Date();
 
+  if (isNaN(selectedDateTime.getTime())) {
+    alert("Invalid Date or Time selected.");
+    return;
+  }
+
   if (selectedDateTime < now) {
-    alert("Invalid Date/Time: You cannot book an appointment in the past.\nPlease select a future date and time.");
-    return; 
+    alert("You cannot book an appointment in the past.\nPlease select a future date and time.");
+    return;
   }
 
   if (!appointments[date]) appointments[date] = [];
@@ -375,8 +382,14 @@ saveBtn.onclick = () => {
   localStorage.setItem("appointments", JSON.stringify(appointments));
 
   closeModalLogic();
-  if (dashboardView.style.display === "block") renderTable();
-  else renderCalendar();
+  
+  if (dashboardView.style.display === "block") {
+    renderTable();
+  } else {
+    renderCalendar();
+  }
+  
+  console.log("Appointment saved successfully!");
 };
 
 window.deleteAppointment = function (dateKey, id) {
